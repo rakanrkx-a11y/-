@@ -1,0 +1,145 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - uses: actions/configure-pages@v5
+
+      - name: Prepare site
+        run: |
+          npm install sharp @resvg/resvg-js --no-save
+          node scripts/export-athar-homescreen-png.mjs
+          VER="$(tr -d '\r\n' < icons/icon-cache-ver.txt)"
+          SHORT_SHA="$(git rev-parse --short HEAD)"
+          mkdir -p site/icons
+          cp index.html site/index.html
+          sed -i "s/<meta name=\"athar-build\" content=\"[^\"]*\">/<meta name=\"athar-build\" content=\"${SHORT_SHA}\">/" site/index.html
+          printf '%s\n' "{\"build\":\"${SHORT_SHA}\",\"builtAt\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > site/app-version.json
+          cp -r styles site/
+          if [ -d js ]; then cp -r js site/; fi
+          cp -r vendor site/
+          test -f site/vendor/ffmpeg/worker.js
+          cp manifest.webmanifest site/manifest.webmanifest
+          if [ -f sw.js ]; then cp sw.js site/sw.js; fi
+          if [ -f CNAME ]; then cp CNAME site/CNAME; fi
+          cp icons/athar-pwa-192-v${VER}.png icons/athar-pwa-512-v${VER}.png \
+            icons/athar-pwa-180-v${VER}.png icons/athar-pwa-maskable-512-v${VER}.png \
+            icons/athar-app-icon.svg icons/athar-homescreen-fullbleed.svg \
+            icons/athar-homescreen-maskable.svg icons/athar-wordmark-email.svg \
+            icons/athar-wordmark-email-v388.png icons/athar-logo-v401.png site/icons/
+          if [ -d icons/avatars ]; then mkdir -p site/icons/avatars && cp -r icons/avatars/. site/icons/avatars/; fi
+          touch site/.nojekyll
+          cp icons/athar-pwa-180-v${VER}.png site/apple-touch-icon.png
+          cp icons/athar-pwa-180-v${VER}.png site/apple-touch-icon-precomposed.png
+          cp icons/athar-pwa-180-v${VER}.png site/icons/apple-touch-icon.png
+          cp icons/athar-pwa-512-v${VER}.png site/favicon.png
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url || steps.deployment_retry2.outputs.page_url || steps.deployment_retry3.outputs.page_url || steps.deployment_retry4.outputs.page_url }}
+    timeout-minutes: 45
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+    steps:
+      - name: Brief pause before Pages deploy
+        run: sleep 15
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+          error_count: 20
+          reporting_interval: 8000
+        continue-on-error: true
+
+      - name: Wait for Pages deployment lock to clear (1)
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 90
+
+      - name: Deploy to GitHub Pages (retry 1)
+        if: steps.deployment.outcome == 'failure'
+        id: deployment_retry
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+          error_count: 20
+          reporting_interval: 8000
+        continue-on-error: true
+
+      - name: Wait for Pages deployment lock to clear (2)
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure'
+        run: sleep 150
+
+      - name: Deploy to GitHub Pages (retry 2)
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure'
+        id: deployment_retry2
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+          error_count: 20
+          reporting_interval: 8000
+        continue-on-error: true
+
+      - name: Wait for Pages deployment lock to clear (3)
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure' && steps.deployment_retry2.outcome == 'failure'
+        run: sleep 210
+
+      - name: Deploy to GitHub Pages (retry 3)
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure' && steps.deployment_retry2.outcome == 'failure'
+        id: deployment_retry3
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+          error_count: 20
+          reporting_interval: 8000
+        continue-on-error: true
+
+      - name: Wait for Pages deployment lock to clear (4)
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure' && steps.deployment_retry2.outcome == 'failure' && steps.deployment_retry3.outcome == 'failure'
+        run: sleep 300
+
+      - name: Deploy to GitHub Pages (retry 4)
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure' && steps.deployment_retry2.outcome == 'failure' && steps.deployment_retry3.outcome == 'failure'
+        id: deployment_retry4
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000
+          error_count: 20
+          reporting_interval: 8000
+
+      - name: Verify Pages deploy
+        if: steps.deployment.outcome == 'failure' && steps.deployment_retry.outcome == 'failure' && steps.deployment_retry2.outcome == 'failure' && steps.deployment_retry3.outcome == 'failure' && steps.deployment_retry4.outcome == 'failure'
+        run: |
+          echo "::error::GitHub Pages deploy failed after 5 attempts (transient backend error)."
+          echo "Do not re-run only the failed deploy job (duplicate artifact risk)."
+          echo "Use Actions → Deploy to GitHub Pages → Run workflow, or wait for the auto-retry workflow."
+          exit 1

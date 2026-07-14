@@ -16,35 +16,35 @@
       --mr-safe-right: env(safe-area-inset-right, 0px);
       --login-portal-bg: var(--mr-bg-2);
       /* ATHAR Redesign — Design System v2 (brass/gold accent, warm neutral, RTL) */
-      --mr-accent: #9c7a3d;
-      --mr-accent-hover: #86682f;
-      --mr-accent-soft: rgba(156, 122, 61, 0.12);
+      --mr-accent: #000000;
+      --mr-accent-hover: #262626;
+      --mr-accent-soft: rgba(0, 0, 0, 0.06);
       --mr-accent-text: #ffffff;
       --mr-primary: var(--mr-accent);
       --mr-primary-hover: var(--mr-accent-hover);
       --mr-primary-soft: var(--mr-accent-soft);
-      --mr-primary-softer: #f1efe9;
+      --mr-primary-softer: rgba(0, 0, 0, 0.04);
       --mr-primary-text: #ffffff;
       --mr-surface: #ffffff;
-      --mr-bg: #f7f5f1;
-      --mr-bg-2: #f1efe9;
+      --mr-bg: #f2f2f7;
+      --mr-bg-2: #f2f2f7;
       --mr-theme-chrome: var(--mr-bg-2);
-      --mr-border: rgba(21, 20, 26, 0.09);
-      --mr-border-2: rgba(21, 20, 26, 0.16);
-      --mr-text: #171519;
-      --mr-text-2: #6f6a63;
-      --mr-text-3: #9b958c;
-      --mr-text-muted: #9b958c;
-      --mr-green: #3f7d4a;
+      --mr-border: rgba(60, 60, 67, 0.18);
+      --mr-border-2: rgba(60, 60, 67, 0.28);
+      --mr-text: #000000;
+      --mr-text-2: #6e6e73;
+      --mr-text-3: #8e8e93;
+      --mr-text-muted: #8e8e93;
+      --mr-green: #34c759;
       --mr-success: var(--mr-green);
-      --mr-amber: #b8791f;
+      --mr-amber: #ff9500;
       --mr-warning: var(--mr-amber);
-      --mr-red: #b1382f;
+      --mr-red: #ff3b30;
       --mr-danger: var(--mr-red);
       /* حالات دلالية */
       --success: var(--mr-green);
       --warning: var(--mr-amber);
-      --info: #3b6ea5;
+      --info: #007aff;
       --destructive: var(--mr-red);
       --mr-radius-pill: 34px;
       --mr-radius-card: 16px;
@@ -54,6 +54,7 @@
       --mr-shadow-primary: 0 4px 14px rgba(108, 71, 255, 0.25);
       --mr-shadow-sidebar: -8px 0 24px rgba(15, 18, 36, 0.06);
       --mr-radius-sm: 8px;
+      --mr-search-fill: rgba(118, 118, 128, 0.12);
       --mr-blue: var(--info);
       --b-blue-bg: color-mix(in oklch, var(--info) 14%, transparent);
       --b-blue-fg: var(--info);
@@ -67,10 +68,10 @@
       --b-red-bg: color-mix(in oklch, var(--destructive) 14%, transparent);
       --b-red-fg: var(--destructive);
       --b-red-bd: color-mix(in oklch, var(--destructive) 30%, transparent);
-      --mr-purple: #7c5cc4;
-      --b-purple-bg: rgba(124, 92, 196, 0.08);
-      --b-purple-fg: #7c5cc4;
-      --b-purple-bd: rgba(124, 92, 196, 0.2);
+      --mr-purple: #af52de;
+      --b-purple-bg: rgba(175, 82, 222, 0.08);
+      --b-purple-fg: #af52de;
+      --b-purple-bd: rgba(175, 82, 222, 0.2);
       /* Legacy aliases → ATHAR v2 tokens (single source of truth) */
       --bg: var(--mr-bg);
       --bg2: var(--mr-bg-2);
@@ -140,35 +141,36 @@
     [data-theme="dark"] {
       --wefaq-logo-color: #ffffff;
       color-scheme: dark;
-      --mr-accent: #cfa964;
-      --mr-accent-hover: #dbb87a;
-      --mr-accent-soft: rgba(207, 169, 100, 0.16);
-      --mr-accent-text: #171519;
+      --mr-accent: #ffffff;
+      --mr-accent-hover: #ececec;
+      --mr-accent-soft: rgba(255, 255, 255, 0.14);
+      --mr-accent-text: #000000;
       --mr-primary: var(--mr-accent);
       --mr-primary-hover: var(--mr-accent-hover);
-      --mr-primary-text: #171519;
-      --mr-surface: #1a1920;
-      --mr-bg: #111014;
-      --mr-bg-2: #232128;
+      --mr-primary-text: #000000;
+      --mr-surface: #1c1c1e;
+      --mr-bg: #000000;
+      --mr-bg-2: #2c2c2e;
       --mr-theme-chrome: var(--mr-bg-2);
-      --mr-border: rgba(255, 255, 255, 0.09);
-      --mr-border-2: rgba(255, 255, 255, 0.16);
-      --mr-text: #f3f1ec;
-      --mr-text-2: #a8a29b;
-      --mr-text-3: #726c66;
-      --mr-text-muted: #726c66;
+      --mr-border: rgba(255, 255, 255, 0.12);
+      --mr-border-2: rgba(255, 255, 255, 0.22);
+      --mr-text: #ffffff;
+      --mr-text-2: #a1a1a6;
+      --mr-text-3: #8e8e93;
+      --mr-text-muted: #8e8e93;
       --mr-primary-soft: var(--mr-accent-soft);
       --mr-primary-softer: rgba(255, 255, 255, 0.06);
-      --mr-green: #6fae7a;
+      --mr-green: #30d158;
       --mr-success: var(--mr-green);
-      --mr-amber: #dba64a;
+      --mr-amber: #ff9f0a;
       --mr-warning: var(--mr-amber);
-      --mr-red: #e2685f;
+      --mr-red: #ff453a;
       --mr-danger: var(--mr-red);
       --success: var(--mr-green);
       --warning: var(--mr-amber);
-      --info: #7aa8d6;
+      --info: #0a84ff;
       --destructive: var(--mr-red);
+      --mr-search-fill: rgba(142, 142, 147, 0.24);
       --mr-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
       --mr-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
       --bg: var(--mr-bg);
@@ -214,24 +216,24 @@
       --b-red-bg: color-mix(in oklch, var(--destructive) 20%, transparent);
       --b-red-bd: color-mix(in oklch, var(--destructive) 36%, transparent);
       --b-red-fg: var(--destructive);
-      --mr-purple: #a992e0;
+      --mr-purple: #bf5af2;
       --purple: var(--mr-purple);
       --purple-text: var(--mr-purple);
-      --purple-light: rgba(169, 146, 224, 0.18);
-      --purple-surface: rgba(169, 146, 224, 0.12);
-      --b-purple-bg: rgba(169, 146, 224, 0.16);
-      --b-purple-bd: rgba(169, 146, 224, 0.34);
+      --purple-light: rgba(191, 90, 242, 0.18);
+      --purple-surface: rgba(191, 90, 242, 0.12);
+      --b-purple-bg: rgba(191, 90, 242, 0.16);
+      --b-purple-bd: rgba(191, 90, 242, 0.34);
       --b-purple-fg: var(--mr-purple);
-      --sidebar-bg: #111014;
+      --sidebar-bg: #000000;
       --sidebar-text: var(--mr-text-2);
       --sidebar-text2: var(--mr-text-3);
       --sidebar-hover: rgba(255, 255, 255, 0.06);
       --sidebar-border: rgba(255, 255, 255, 0.09);
       --sidebar-active: var(--mr-accent);
-      --sidebar-active-text: #171519;
-      --fig-sidebar-bg: #111014;
+      --sidebar-active-text: #000000;
+      --fig-sidebar-bg: #000000;
       --fig-sidebar-active: var(--mr-accent-soft);
-      --fig-sidebar-logout-bg: #111014;
+      --fig-sidebar-logout-bg: #000000;
       --fig-sidebar-logout-text: var(--mr-text-2);
       --fig-sidebar-logout-hover: rgba(255, 255, 255, 0.06);
     }
@@ -27968,7 +27970,7 @@
     [data-theme="dark"] html.mr-mobile-ui .mob-nav-item.active > i,
     html.mr-mobile-ui [data-theme="dark"] .mob-nav-item.active > i {
       background: var(--mr-accent);
-      color: #171519;
+      color: var(--mr-accent-text);
     }
 
     /* ── Topbar lockup subtle animation on load ──────────────────────────── */
@@ -28104,7 +28106,7 @@
 
     /* For dark theme: accent text is dark on gold background */
     [data-theme="dark"] html.mr-mobile-ui .mob-nav-item.active > i {
-      color: #171519 !important;
+      color: var(--mr-accent-text) !important;
     }
 
     /* ── Indicators row (response/compliance rings) ──────────────────────── */
